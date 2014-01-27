@@ -3,11 +3,13 @@ var context = canvas.getContext("2d");
 
 var title = new Image();
 
+// Create butten entity
 function Button(src){
   this.img = new Image();
   this.img.src = src;
   this.x = 0; this.y = 0;
 };
+
 Button.prototype.clicked = function(){
     // TODO: When button was clicked
   };
@@ -16,8 +18,40 @@ Button.prototype.draw = function(){
     // TODO: Draw button to (this.x, this.y)
   };
 
+function Screen(){
+    this.frame0 = function(){
+        this.init = function(){
+            // TODO: Set up frame elements
+        };
+        this.act = function(){
+            // TODO: Do stuff 60 times a second  
+        };
+        this.draw = function(){
+            // TODO: Display the frame to canvas
+        };
+    };
+    this.frame1 = function(){
+        this.init = function(){
+            // TODO: Set up frame elements
+        };
+        this.act = function(){
+            // TODO: Do stuff 60 times a second  
+        };
+        this.draw = function(){
+            // TODO: Display the frame to canvas
+        };
+    };
+    
+    // Make a list of all frames
+    this.frameList = [frame0, frame1]
+    // Current frame will be accessed by Screen.frameList[Screen.currentFrame]
+    this.currentFrame = 0;
+};
+
+
+
 function clickHandler(event){
-    alert("Clicked at ("+event.x+","+event.y+").")
+    // TODO: Handle click events
 }
 
 
