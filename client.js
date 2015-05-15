@@ -1,80 +1,182 @@
-var canvas = document.getElementById("canvasID");
-var context = canvas.getContext("2d");
+var PLAYGROUND_HEIGHT = 700;
+var PLAYGROUND_WIDTH =  1200;
+var REFRESH_RATE =      60;
 
-var title = new Image();
+$(function () {
 
-// Create butten entity
-function Button(src){
-  this.img = new Image();
-  this.img.src = src;
-  this.x = 0; this.y = 0;
-};
-
-Button.prototype.clicked = function(){
-    // TODO: When button was clicked
-  };
-Button.prototype.draw = function(){
-    console.log(this.img.src);
-    // TODO: Draw button to (this.x, this.y)
-  };
-
-function Screen(){
-    this.frame0 = function(){
-        this.init = function(){
-            // TODO: Set up frame elements
-        };
-        this.act = function(){
-            // TODO: Do stuff 60 times a second  
-        };
-        this.draw = function(){
-            // TODO: Display the frame to canvas
-        };
-    };
-    this.frame1 = function(){
-        this.init = function(){
-            // TODO: Set up frame elements
-        };
-        this.act = function(){
-            // TODO: Do stuff 60 times a second  
-        };
-        this.draw = function(){
-            // TODO: Display the frame to canvas
-        };
-    };
+    // frame constants:
+    MENU=     0;
+    NEW_GAME= 1;
+    CONTINUE= 2;
+    SETTINGS= 3;
+    IN_GAME=  4;
     
-    // Make a list of all frames
-    this.frameList = [frame0, frame1]
-    // Current frame will be accessed by Screen.frameList[Screen.currentFrame]
-    this.currentFrame = 0;
-};
+
+    // globals
+    var cFrame = MENU;
+    var frameLoaded = false;
+
+
+    $("#playground").playground({
+        height: PLAYGROUND_HEIGHT,
+        width: PLAYGROUND_WIDTH,
+        refreshRate: 60,
+        keyTracker: true,
+        mouseTracker: true,
+    });
+
+    // playground sprites
+    var background1 = new $.gQ.Animation({ imageURL: "./resource/stage/background1.png" });
+    var titleGfx = new $.gQ.Animation({ imageURL: "./resource/stage/titleText.png" });
+
+    var menuNEW_GAME = new $.gQ.Animation({imageURL: "./resource/stage/menuNewGame.png"});
+    var menuCONTINUE = new $.gQ.Animation({imageURL: "./resource/stage/menuContinue.png"});
+    var menuSETTINGS = new $.gQ.Animation({ imageURL: "./resource/stage/menuSettings.png"});
+    var menuEXIT = new $.gQ.Animation({ imageURL: "./resource/stage/menuExit.png"})
+
+
+    /**
+    * Utility function that clear all visual aspects from the screen
+    */
+    function clearScreen() {
+        // TODO: merge with changeFrame if not used outside of changeFrame
+        $.playground().pauseGame();
+        $.playground().clearScenegraph();
+        $.playground().resumeGame();
+    };
+
+    /**
+    * Utility function to change the current frame to given frame
+    * 
+    * @param {newFrame} frame to be changed to
+    */
+    function changeFrame(newFrame) {
+        clearScreen();
+        cFrame = newFrame;
+    };
+
+
+    /**
+    * Utility function that add visual elements to the screen.
+    *
+    * @param {frameID} frameID to be built
+    */
+    function loadFrame(frameID) {
+        switch (frameID) {
+            case MENU:
+                $.playground().addSprite("background1", {
+                    posx: 0, posy: 0,
+                    height: PLAYGROUND_HEIGHT,
+                    width: PLAYGROUND_WIDTH,
+                    animation: background1,
+                });
+
+                $.playground().addSprite("menuNEW_GAME", {
+                    posx: PLAYGROUND_WIDTH * .4 + 100,
+                    posy: PLAYGROUND_HEIGHT * .2,
+                    height: PLAYGROUND_HEIGHT * .2,
+                    width: PLAYGROUND_WIDTH * .2,
+                    animation: menuNEW_GAME,
+                });
+                $.playground().addSprite("menuCONTINUE", {
+                    posx: PLAYGROUND_WIDTH * .4 + 100,
+                    posy: PLAYGROUND_HEIGHT * .3,
+                    height: PLAYGROUND_HEIGHT * .2,
+                    width: PLAYGROUND_WIDTH * .2,
+                    animation: menuCONTINUE,
+                });
+                $.playground().addSprite("menuSETTINGS", {
+                    posx: PLAYGROUND_WIDTH * .4 + 100,
+                    posy: PLAYGROUND_HEIGHT * .4,
+                    height: PLAYGROUND_HEIGHT * .2,
+                    width: PLAYGROUND_WIDTH * .2,
+                    animation: menuSETTINGS,
+                });
+
+                // newgame
+                $("#menuNEW_GAME").click(function (e) {
+                    console.log("Click New Game");
+                    changeFrame(NEW_GAME);
+                });
+                $("#menuNEW_GAME").hover(function (e) {
+                    console.log("Over New Game");
+                }, function (e) {
+                    console.log("Out New Game");
+                });
+
+                // continue
+                $("#menuCONTINUE").click(function (e) {
+                    console.log("Click Continue");
+                    changeFrame(CONTINUE);
+                });
+                $("#menuCONTINUE").hover(function (e) {
+                    console.log("Over Continue");
+                }, function (e) {
+                    console.log("Out Continue");
+                });
+
+                // settings
+                $("#menuSETTINGS").click(function (e) {
+                    console.log("Click Settings");
+                    changeFrame(SETTINGS);
+                });
+                $("#menuSETTINGS").hover(function (e) {
+                    console.log("Over Settings");
+                }, function (e) {
+                    console.log("Out Settings");
+                });
+
+
+                frameLoaded = true;
+                break;
+            case NEW_GAME:
+                break;
+            case CONTINUE:
+                break;
+            case SETTINGS:
+                break;
+            case PLAYGAME:
+                break;
+        }
+    };
+
+    /**
+    * Callback function to serve as the main loop.
+    */
+    function main() {
+        if (!frameLoaded) loadFrame(cFrame);
+
+        switch (cFrame) {
+            case MENU:
+                break;
+            case NEW_GAME:
+                break;
+            case CONTINUE:
+                break;
+            case SETTINGS:
+                break;
+            case PLAYGAME:
+                break;
+        }; // switch
+    };
 
 
 
-function clickHandler(event){
-    // TODO: Handle click events
-}
+    // callbacks
+    $.playground().registerCallback(main, REFRESH_RATE); // main
+
+    // start loading
+    $.loadCallback(function (percent) {
+        $("#loadingBar").width(PLAYGROUND_WIDTH * .0075 * percent);
+    });
+
+    // initialize start button
+    $.playground().startGame(function () {
+        $("#welcome").fadeOut(2000, function () {$(this).remove() });
+    });
+    
+});
 
 
 
-var button_Continue = new Button("resources/menuContinue.png");
-var button_NewGame = new Button("resources/menuNewGame.png");
-var button_Settings = new Button("resources/menuSettings.png");
-var button_Title = new Button("resources/titleText.png");
 
-button_Continue.x = 0; button_Continue.y = 0;
-button_NewGame.x = 0; button_NewGame.y = 0;
-button_Settings.x = 0; button_NewGame.y = 0;
-button_Title.x = 0; button_Title.y = 0;
-
-canvas.addEventListener("click", clickHandler);
-//button_Continue.addEventListener("click", button_Continue.clicked);
-//button_NewGame.addEventListener("click", button_NewGame.clicked);
-//button_Settings.addEventListener("click", button_Settings.clicked);
-
-var buttonList = [button_Continue, button_NewGame, button_Settings, button_Title];
-
-var gameloop = function(){
-    for (button in buttonList){
-        button.draw();
-    }
-}

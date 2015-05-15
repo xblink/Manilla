@@ -1,0 +1,43 @@
+img {
+    display: block;
+    position: relative;
+    margin-left: auto;
+    margin-right: auto;
+
+}#playground {
+    width: 1200px;
+    margin:0 auto;
+    display: block;
+    border:1px solid #000000;
+    background: url('resource/stage/background1.png');
+}
+
+#welcome {
+    position: absolute;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 15%;
+    color: white;
+    z-index: 1000;
+}
+
+#loadingBarB {
+    position: relative;
+    height: 8px;
+    width: 75%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 5%;
+    border: thin solid #000000; 
+    background: none;
+}
+
+#loadingBar {
+    position: relative;
+    margin-left: auto;
+    margin-right: auto;
+    height: 100%;
+    width: 0px;
+    background: url('resource/stage/load.png');
+}
